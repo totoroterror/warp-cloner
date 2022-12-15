@@ -10,7 +10,7 @@ With this script you will be able to clone 12 PB keys in large amounts.
 2. Install [Python 3.11](https://www.python.org/downloads/) or higher
 3. Install dependencies using `pip install -r requirements.txt`
 4. Copy `.env.example` to `.env` and fill variables (see next section)
-5. Launch script using `python src/main.py`
+5. Launch script using `python -u src/main.py`
 6. Wait for results in console.
 
 ## Configuration
@@ -18,7 +18,7 @@ With this script you will be able to clone 12 PB keys in large amounts.
 - `BASE_KEYS` (not required) - keys to clone divided by comma, if none then default keys will be used (script may not work with default keys)
 - `THREADS_COUNT` (default: 1) - amount of threads.
 - `PROXY_URL` (not required) - proxy urls divided by comma, if none then script will be launched in proxyless mode.
-- `TIMEOUT` (default: 25) - seconds to sleep after key clone
+- `DELAY` (default: 25) - seconds to sleep after key clone
 
 ## Notes
 

@@ -1,5 +1,6 @@
 import random
 from typing import Any, TypedDict
+from itertools import count
 
 from aiohttp import ClientResponse, ClientSession, ClientTimeout
 from aiohttp_socks import ProxyConnector
@@ -11,6 +12,8 @@ BASE_URL: str = "https://api.cloudflareclient.com"
 BASE_HEADERS: dict[str, str] = {
     'User-Agent': 'okhttp/3.12.1',
 }
+
+PROXY_COUNTER = iter(count())
 
 
 class RegisterDataAccount(TypedDict):
@@ -134,9 +137,11 @@ async def get_account(path: str, session: ClientSession, reg_id: str, token: str
 async def clone_key(key: str) -> GetInfoData:
     proxies: list[str] = [] if config.PROXY_URL is None else config.PROXY_URL.split(',')
 
+    proxy_url: str | None = proxies[next(PROXY_COUNTER) % len(proxies)] if config.PROXY_URL else None
+
     connector: ProxyConnector | None = ProxyConnector.from_url(
-        random.choice(proxies)
-    ) if config.PROXY_URL else None
+        proxy_url
+    ) if proxy_url else None
 
     path: str = 'v0a{}'.format(
         random.randint(100, 999)

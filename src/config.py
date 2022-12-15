@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     )
     THREADS_COUNT: int = Field(env="THREADS_COUNT", default=1)
     PROXY_URL: str | None = Field(env="PROXY_URL")
-    TIMEOUT: int = Field(env="TIMEOUT", default=25)
+    DELAY: int = Field(env="DELAY", default=25)
 
     class Config:
         env_file = ".env"
