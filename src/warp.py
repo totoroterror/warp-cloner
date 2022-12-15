@@ -99,7 +99,7 @@ async def add_key(path: str, session: ClientSession, reg_id: str, token: str, ke
 
     if response.status != 200:
         response.close()
-        raise Exception('Failed to add key: {}'.format(response.status))
+        raise Exception('Failed to add key: {} {}'.format(response.status, await response.text()))
 
 
 async def delete_account(path: str, session: ClientSession, reg_id: str, token: str) -> None:
@@ -127,7 +127,7 @@ async def get_account(path: str, session: ClientSession, reg_id: str, token: str
 
     if response.status != 200:
         response.close()
-        raise Exception('Failed to get account: {}'.format(response.status))
+        raise Exception('Failed to get account: {} {}'.format(response.status, await response.text()))
 
     json: GetInfoData = await response.json()
 
@@ -151,10 +151,7 @@ async def clone_key(key: str) -> GetInfoData:
 
     timeout: ClientTimeout = ClientTimeout(total=15)
 
-    session = ClientSession(connector=connector, timeout=timeout, base_url=base_url)
-
-
-    try:
+    async with ClientSession(connector=connector, timeout=timeout, base_url=base_url) as session:
         register_data: RegisterData = await register(path, session)
 
         refferer_body: dict[str, str] = {
@@ -171,7 +168,4 @@ async def clone_key(key: str) -> GetInfoData:
         await delete_account(path, session, register_data['id'], register_data['token'])
 
         return information
-    finally:
-        await session.close()
-        if connector is not None:
-            await connector.close()
+
