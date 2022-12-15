@@ -24,8 +24,6 @@ With this script you will be able to clone 12 PB keys in large amounts.
 
 ## Notes
 
-Script doesn't output any kind of errors (including rate limit errors or proxy errors) for better readability of output.
-
 You can use ipv6 proxy as far as ipv4 proxy if they don't block Warp API endpoint.
 
 ## Contributing
