@@ -14,7 +14,7 @@ class Settings(BaseSettings):
         ])
     )
     THREADS_COUNT: int = Field(env="THREADS_COUNT", default=1)
-    PROXY_URL: str | None = Field(env="PROXY_URL")
+    PROXY_FILE: str | None = Field(env="PROXY_FILE", default=None)
     DELAY: int = Field(env="DELAY", default=25)
     OUTPUT_FILE: str = Field(env="OUTPUT_FILE", default="output.txt")
     OUTPUT_FORMAT: str = Field(env="OUTPUT_FORMAT", default="{key} | {referral_count}")

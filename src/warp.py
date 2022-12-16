@@ -1,19 +1,14 @@
 import random
-from typing import Any, TypedDict
-from itertools import count
+from typing import Any, Optional, TypedDict
 
 from aiohttp import ClientResponse, ClientSession, ClientTimeout
 from aiohttp_socks import ProxyConnector
-
-from config import config
 
 
 BASE_URL: str = "https://api.cloudflareclient.com"
 BASE_HEADERS: dict[str, str] = {
     'User-Agent': 'okhttp/3.12.1',
 }
-
-PROXY_COUNTER = iter(count())
 
 
 class RegisterDataAccount(TypedDict):
@@ -76,8 +71,9 @@ async def register(path: str, session: ClientSession, data: dict[str, str] = {})
     )
 
     if response.status != 200:
+        response_text=  await response.text()
         response.close()
-        raise Exception('Failed to register: {} {}'.format(response.status, await response.text()))
+        raise Exception('Failed to register: {} {}'.format(response.status, response_text))
 
     json: RegisterData = await response.json()
 
@@ -98,8 +94,9 @@ async def add_key(path: str, session: ClientSession, reg_id: str, token: str, ke
     )
 
     if response.status != 200:
+        response_text = await response.text()
         response.close()
-        raise Exception('Failed to add key: {} {}'.format(response.status, await response.text()))
+        raise Exception('Failed to add key: {} {}'.format(response.status, response_text))
 
 
 async def delete_account(path: str, session: ClientSession, reg_id: str, token: str) -> None:
@@ -126,19 +123,16 @@ async def get_account(path: str, session: ClientSession, reg_id: str, token: str
     )
 
     if response.status != 200:
+        response_text = await response.text()
         response.close()
-        raise Exception('Failed to get account: {} {}'.format(response.status, await response.text()))
+        raise Exception('Failed to get account: {} {}'.format(response.status, response_text))
 
     json: GetInfoData = await response.json()
 
     return json
 
 
-async def clone_key(key: str) -> GetInfoData:
-    proxies: list[str] = [] if config.PROXY_URL is None else config.PROXY_URL.split(',')
-
-    proxy_url: str | None = proxies[next(PROXY_COUNTER) % len(proxies)] if config.PROXY_URL else None
-
+async def clone_key(key: str, proxy_url: Optional[str]) -> GetInfoData:
     connector: ProxyConnector | None = ProxyConnector.from_url(
         proxy_url
     ) if proxy_url else None

@@ -17,7 +17,7 @@ With this script you will be able to clone 12 PB keys in large amounts.
 
 - `BASE_KEYS` (not required) - keys to clone divided by comma, if none then default keys will be used (script may not work with default keys)
 - `THREADS_COUNT` (default: `1`) - amount of threads.
-- `PROXY_URL` (not required) - proxy urls divided by comma, if none then script will be launched in proxyless mode.
+- `PROXY_FILE` (not required) - path to proxy file, if none then script will be launched in proxyless mode.
 - `DELAY` (default: `25`) - seconds to sleep after key clone
 - `OUTPUT_FILE` (default: `output.txt`) - file to append generated keys
 - `OUTPUT_FORMAT` (default: `{key} | {referral_count}`) - output format

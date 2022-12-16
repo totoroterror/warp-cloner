@@ -1,6 +1,7 @@
 ## Custom ##
 
 output*.txt
+prox*.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,venv,dotenv,visualstudiocode,pycharm+all,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,venv,dotenv,visualstudiocode,pycharm+all,python

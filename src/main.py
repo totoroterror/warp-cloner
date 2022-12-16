@@ -1,25 +1,39 @@
 import asyncio
-import random
+import signal
 
-from typing import NoReturn
 from loguru import logger
 
 from config import config
 from warp import clone_key, GetInfoData
 
+from utilities import key_dispatcher, proxy_dispatcher
 
-async def worker(id: int) -> NoReturn:
+
+class SignalHandler:
+    KEEP_PROCESSING: bool = True
+    def __init__(self) -> None:
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+    def exit_gracefully(self, signum, frame) -> None:
+        logger.info('Received signal {}, exiting gracefully...'.format(signum))
+        self.KEEP_PROCESSING = False
+
+
+signal_handler = SignalHandler()
+
+
+async def worker(id: int) -> None:
     logger.debug('Worker {} started'.format(id))
 
-    keys = config.BASE_KEYS.split(',')
-
-    while True:
+    while signal_handler.KEEP_PROCESSING:
         try:
             key: GetInfoData = await clone_key(
-                random.choice(keys)
+                key_dispatcher.get_key(),
+                proxy_dispatcher.get_proxy()
             )
 
-            keys.append(key['license'])
+            key_dispatcher.add_key(key['license'])
 
             output = config.OUTPUT_FORMAT.format(
                 key=key['license'],
@@ -48,7 +62,4 @@ async def main() -> None:
 
 
 if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        pass
+    asyncio.run(main())
