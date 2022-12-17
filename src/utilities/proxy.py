@@ -1,4 +1,4 @@
-import itertools
+from itertools import cycle
 
 from config import config
 
@@ -11,7 +11,7 @@ class ProxyDispatcher():
         with open(proxy_file, 'r') as file:
             self.proxies: list[str] = file.read().splitlines()
 
-        self.proxy_counter: itertools.cycle[int] = itertools.cycle(range(len(self.proxies)))
+        self.proxy_counter: cycle[int] = cycle(range(len(self.proxies)))
 
     def get_proxy(self) -> str | None:
         if self.proxies is None:

@@ -5,7 +5,7 @@ from aiohttp import ClientResponse, ClientSession, ClientTimeout
 from aiohttp_socks import ProxyConnector
 
 
-BASE_URL: str = "https://api.cloudflareclient.com"
+BASE_URL: str = 'https://api.cloudflareclient.com'
 BASE_HEADERS: dict[str, str] = {
     'User-Agent': 'okhttp/3.12.1',
 }
@@ -71,7 +71,12 @@ async def register(path: str, session: ClientSession, data: dict[str, str] = {})
     )
 
     if response.status != 200:
-        response_text=  await response.text()
+        match response.status:
+            case 403 | 429:
+                response_text: str = 'Access denied'
+            case _:
+                response_text: str =  await response.text()
+
         response.close()
         raise Exception('Failed to register: {} {}'.format(response.status, response_text))
 

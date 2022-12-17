@@ -19,4 +19,4 @@ class KeyDispenser():
         return self.keys[next(self.key_counter) % len(self.keys)]
 
 
-key_dispatcher: KeyDispenser = KeyDispenser(config.BASE_KEYS.split(','))
+key_dispatcher: KeyDispenser = KeyDispenser(config.BASE_KEYS)
