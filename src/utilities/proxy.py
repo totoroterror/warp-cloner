@@ -4,12 +4,14 @@ from config import config
 
 
 class ProxyDispatcher():
+    proxies: list[str] | None = None
+
     def __init__(self, proxy_file: str | None) -> None:
-        if proxy_file is None:
+        if proxy_file is None or proxy_file == '':
             return
 
         with open(proxy_file, 'r') as file:
-            self.proxies: list[str] = file.read().splitlines()
+            self.proxies = file.read().splitlines()
 
         self.proxy_counter: cycle[int] = cycle(range(len(self.proxies)))
 
