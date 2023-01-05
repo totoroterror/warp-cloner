@@ -1,3 +1,4 @@
+from distutils.command.config import config
 import random
 from typing import Any, Optional, TypedDict
 
@@ -137,7 +138,7 @@ async def get_account(path: str, session: ClientSession, reg_id: str, token: str
     return json
 
 
-async def clone_key(key: str, proxy_url: Optional[str]) -> GetInfoData:
+async def clone_key(key: str, proxy_url: Optional[str], device_model: Optional[str]) -> GetInfoData:
     connector: ProxyConnector | None = ProxyConnector.from_url(
         proxy_url
     ) if proxy_url else None
@@ -151,7 +152,13 @@ async def clone_key(key: str, proxy_url: Optional[str]) -> GetInfoData:
     timeout: ClientTimeout = ClientTimeout(total=15)
 
     async with ClientSession(connector=connector, timeout=timeout, base_url=base_url) as session:
-        register_data: RegisterData = await register(path, session)
+        register_body: dict[str, str] = {}
+
+        if device_model:
+            register_body['type'] = 'Android'
+            register_body['model'] = device_model
+
+        register_data: RegisterData = await register(path, session, register_body)
 
         refferer_body: dict[str, str] = {
             'referrer': register_data['id'],
@@ -164,7 +171,8 @@ async def clone_key(key: str, proxy_url: Optional[str]) -> GetInfoData:
 
         information: GetInfoData = await get_account(path, session, register_data['id'], register_data['token'])
 
-        await delete_account(path, session, register_data['id'], register_data['token'])
+        if not device_model:
+            await delete_account(path, session, register_data['id'], register_data['token'])
 
         return information
 

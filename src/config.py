@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     )
     THREADS_COUNT: int = Field(env='THREADS_COUNT', default=1)
     PROXY_FILE: str | None = Field(env='PROXY_FILE', default=None)
+    DEVICE_MODELS: list[str] = Field(env='DEVICE_MODELS', default=[])
     DELAY: int = Field(env='DELAY', default=25)
     OUTPUT_FILE: str = Field(env='OUTPUT_FILE', default='output.txt')
     OUTPUT_FORMAT: str = Field(env='OUTPUT_FORMAT', default='{key} | {referral_count}')
@@ -26,7 +27,7 @@ class Settings(BaseSettings):
 
         @classmethod
         def parse_env_var(cls, field: str, raw_val: str) -> Any:
-            if field == 'BASE_KEYS':
+            if field == 'BASE_KEYS' or field == 'DEVICE_MODELS':
                 if isinstance(raw_val, str):
                     return str(raw_val).split(',')
 

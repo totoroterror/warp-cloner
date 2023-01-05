@@ -1,5 +1,6 @@
 import asyncio
 import signal
+import random
 
 from loguru import logger
 
@@ -30,7 +31,8 @@ async def worker(id: int) -> None:
         try:
             key: GetInfoData = await clone_key(
                 key_dispatcher.get_key(),
-                proxy_dispatcher.get_proxy()
+                proxy_dispatcher.get_proxy(),
+                len(config.DEVICE_MODELS) > 0 and random.choice(config.DEVICE_MODELS) or None,
             )
 
             key_dispatcher.add_key(key['license'])
