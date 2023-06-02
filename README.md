@@ -15,6 +15,10 @@ With this script you will be able to clone 12 PB keys in large amounts.
 5. Launch script using `python -u src/main.py`
 6. Wait for results in console.
 
+## Properly closing application
+
+To avoid getting error "Too many connected devices" in future, you should properly exit from the application by pressing `control` + `c` and wait for application to close (it will take ~30 seconds).
+
 ## Configuration
 
 - `BASE_KEYS` (not required) - keys to clone divided by comma, if none then default keys will be used (script may not work with default keys)
@@ -28,7 +32,7 @@ With this script you will be able to clone 12 PB keys in large amounts.
 
 ## Notes
 
-You can use ipv6 proxy as far as ipv4 proxy if they don't block Warp API endpoint.
+You can use almost any proxy (ipv4 / ipv6) as far as they don't block Warp API endpoint. I suggest you to use ipv6 proxy because they are way cheaper, *but keep in mind, that your network should support ipv6 in most cases to do this*.
 
 ## Contributing
 
