@@ -1,5 +1,5 @@
 from typing import Any
-from pydantic import BaseSettings, Field, validator
+from pydantic import BaseSettings, Field
 
 
 class Settings(BaseSettings):
@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     DELAY: int = Field(env='DELAY', default=25)
     OUTPUT_FILE: str = Field(env='OUTPUT_FILE', default='output.txt')
     OUTPUT_FORMAT: str = Field(env='OUTPUT_FORMAT', default='{key} | {referral_count}')
+    RETRY_COUNT: int = Field(env='RETRY_COUNT', default=3)
 
     class Config:
         env_file = '.env'

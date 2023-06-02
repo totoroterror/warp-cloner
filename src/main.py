@@ -24,20 +24,38 @@ class SignalHandler:
 signal_handler = SignalHandler()
 
 
+async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> GetInfoData | None:
+    if retry_count > config.RETRY_COUNT:
+        return None
+
+    try:
+        key: GetInfoData = await clone_key(
+            key_to_clone,
+            proxy_dispatcher.get_proxy(),
+            len(config.DEVICE_MODELS) > 0 and random.choice(config.DEVICE_MODELS) or None,
+        )
+
+        key_dispatcher.add_key(key['license'])
+
+        return key
+    except Exception as e:
+        logger.error('{} (key: {})'.format(e, key_to_clone))
+
+        await asyncio.sleep(config.DELAY)
+
+        return await custom_clone_key(key_to_clone, retry_count + 1)
+
+
 async def worker(id: int) -> None:
     logger.debug('Worker {} started'.format(id))
 
     while signal_handler.KEEP_PROCESSING:
-        try:
-            key: GetInfoData = await clone_key(
-                key_dispatcher.get_key(),
-                proxy_dispatcher.get_proxy(),
-                len(config.DEVICE_MODELS) > 0 and random.choice(config.DEVICE_MODELS) or None,
-            )
+        key: GetInfoData | None = await custom_clone_key(
+            key_dispatcher.get_key(),
+        )
 
-            key_dispatcher.add_key(key['license'])
-
-            output = config.OUTPUT_FORMAT.format(
+        if key != None:
+            output: str = config.OUTPUT_FORMAT.format(
                 key=key['license'],
                 referral_count=key['referral_count'],
             )
@@ -46,11 +64,9 @@ async def worker(id: int) -> None:
 
             with open(config.OUTPUT_FILE, 'a') as file:
                 file.write(output + '\n')
-        except Exception as e:
-            logger.error(e)
-            pass
 
         await asyncio.sleep(config.DELAY)
+
 
 async def main() -> None:
     tasks = []

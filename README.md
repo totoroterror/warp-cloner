@@ -24,6 +24,7 @@ With this script you will be able to clone 12 PB keys in large amounts.
 - `DELAY` (default: `25`) - seconds to sleep after key clone
 - `OUTPUT_FILE` (default: `output.txt`) - file to append generated keys
 - `OUTPUT_FORMAT` (default: `{key} | {referral_count}`) - output format
+- `RETRY_COUNT` (default: 3) - how much times application will retry generation with same key
 
 ## Notes
 
