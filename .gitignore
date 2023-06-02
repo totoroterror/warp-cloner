@@ -1,7 +1,15 @@
 ## Custom ##
 
+### application related ###
+
 output*.txt
 prox*.txt
+
+### dotenv ###
+
+.env*
+!.env.example
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,venv,dotenv,visualstudiocode,pycharm+all,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,venv,dotenv,visualstudiocode,pycharm+all,python
