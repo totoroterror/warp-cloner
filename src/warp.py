@@ -1,4 +1,3 @@
-from distutils.command.config import config
 import random
 from typing import Any, Optional, TypedDict
 
