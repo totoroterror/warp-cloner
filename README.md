@@ -1,10 +1,10 @@
 # Warp Cloner
 
-![warp-cloner](https://socialify.git.ci/totoroterror/warp-cloner/image?description=1&descriptionEditable=Simple%20Python%20script%20that%20can%20clone%20Warp%20Plus%20(1.1.1.1)%20keys%20and%20generate%2012PB%20keys.&language=1&name=1&owner=1&pattern=Circuit%20Board&stargazers=1&theme=Light)
+![warp-cloner](https://socialify.git.ci/totoroterror/warp-cloner/image?font=Raleway&language=1&name=1&owner=1&pattern=Circuit%20Board&stargazers=1&theme=Light)
 
 Simple Python script that can clone [Warp Plus](https://1.1.1.1/) keys.
 
-With this script you will be able to clone 12 PB keys in large amounts.
+With this script you will be able to clone many 12-24 PB keys.
 
 ## Installation
 
@@ -14,10 +14,6 @@ With this script you will be able to clone 12 PB keys in large amounts.
 4. Copy `.env.example` to `.env` and fill variables (see next section)
 5. Launch script using `python -u src/main.py`
 6. Wait for results in console.
-
-## Properly closing application
-
-To avoid getting error "Too many connected devices" in future, you should properly exit from the application by pressing `control` + `c` and wait for application to close (it will take ~30 seconds).
 
 ## Configuration
 
@@ -32,6 +28,16 @@ To avoid getting error "Too many connected devices" in future, you should proper
 
 ## Notes
 
+### Getting your own 12-24 PB keys to fill BASE_KEYS
+
+You can get your own key to start with using [@warpplus's bot](https://t.me/generatewarpplusbot) (limited to 1 key per 24 hours) or find some keys on forums.
+
+### Properly closing application
+
+To avoid getting error "Too many connected devices" in future, you should properly exit from the application by pressing `control` + `c` and wait for application to close (it will take ~30 seconds).
+
+### Proxy selection
+
 You can use almost any proxy (ipv4 / ipv6) as far as they don't block Warp API endpoint. I suggest you to use ipv6 proxy because they are way cheaper, *but keep in mind, that your network should support ipv6 in most cases to do this*.
 
 ## Contributing
@@ -44,6 +50,6 @@ This project licensed under MIT License.
 
 ## Support me
 
-You can support my further developments or support this project by buying me a coffee or pizza.
+You can support my further developments or support this project by buying me a coffee using link below or by starring this repo ♥
 
 [![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/totoroterror)
