@@ -25,7 +25,7 @@ signal_handler = SignalHandler()
 
 
 async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> GetInfoData | None:
-    if retry_count > config.RETRY_COUNT:
+    if retry_count > config.RETRY_COUNT or not signal_handler.KEEP_PROCESSING:
         return None
 
     try:
@@ -65,7 +65,8 @@ async def worker(id: int) -> None:
             with open(config.OUTPUT_FILE, 'a') as file:
                 file.write(output + '\n')
 
-        await asyncio.sleep(config.DELAY)
+        if signal_handler.KEEP_PROCESSING:
+            await asyncio.sleep(config.DELAY)
 
 
 async def main() -> None:

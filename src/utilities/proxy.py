@@ -13,13 +13,13 @@ class ProxyDispatcher():
         with open(proxy_file, 'r') as file:
             self.proxies = file.read().splitlines()
 
-        self.proxy_counter: cycle[int] = cycle(range(len(self.proxies)))
+        self.proxy_cycle = cycle(self.proxies)
 
     def get_proxy(self) -> str | None:
         if self.proxies is None:
             return None
 
-        return self.proxies[next(self.proxy_counter) % len(self.proxies)]
+        return next(self.proxy_cycle)
 
 
 proxy_dispatcher: ProxyDispatcher = ProxyDispatcher(config.PROXY_FILE)

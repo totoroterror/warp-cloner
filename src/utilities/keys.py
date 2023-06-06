@@ -1,13 +1,12 @@
-from itertools import count
-
 from config import config
+from .mutable_cycle import mutable_cycle
 
 
 class KeyDispenser():
     def __init__(self, keys: list[str] = []) -> None:
         self.keys: list[str] = keys
 
-        self.key_counter = iter(count())
+        self.key_cycle = mutable_cycle(self.keys)
 
     def add_key(self, key: str) -> None:
         self.keys.append(key)
@@ -16,7 +15,7 @@ class KeyDispenser():
         if self.keys is None or len(self.keys) == 0:
             raise Exception('No keys available')
 
-        return self.keys[next(self.key_counter) % len(self.keys)]
+        return next(self.key_cycle)
 
 
 key_dispatcher: KeyDispenser = KeyDispenser(config.BASE_KEYS)

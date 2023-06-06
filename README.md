@@ -28,6 +28,10 @@ With this script you will be able to clone many 12-24 PB keys.
 
 ## Notes
 
+### Proxy format
+
+Proxy format for `PROXY_FILE` is `protocol://user:pass@ip:port`, example: `socks5://example.org:1892` / `http://totoro:warp@example.org`, one proxy per line.
+
 ### Getting your own 12-24 PB keys to fill BASE_KEYS
 
 You can get your own key to start with using [@warpplus's bot](https://t.me/generatewarpplusbot) (limited to 1 key per 24 hours) or find some keys on forums.
