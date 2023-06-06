@@ -17,7 +17,7 @@ class SignalHandler:
         signal.signal(signal.SIGTERM, self.exit_gracefully)
 
     def exit_gracefully(self, signum, frame) -> None:
-        logger.info('Received signal {}, stopiing all threads...'.format(signum))
+        logger.info('Received signal {}, stopping all threads...'.format(signum))
         self.KEEP_PROCESSING = False
 
 
