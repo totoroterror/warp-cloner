@@ -73,9 +73,9 @@ async def register(path: str, session: ClientSession, data: dict[str, str] = {})
     if response.status != 200:
         match response.status:
             case 403:
-                response_text: str = 'Access denied (ip is blocked on cloudflare)'
+                response_text: str = 'Access denied, proxy or your IP is probably blocked on API'
             case 429:
-                response_text: str = 'Rate Limit (too much clones from this ip for last minute)'
+                response_text: str = 'Too Many Requests, too much keys was generated for last minute from this proxy or your IP'
             case _:
                 response_text: str =  await response.text()
 
