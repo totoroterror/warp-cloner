@@ -30,7 +30,7 @@ With this script you will be able to clone many 12-24 PB keys.
 
 ### Proxy format
 
-Proxy format for `PROXY_FILE` is `protocol://user:pass@ip:port`, example: `socks5://example.org:1892` / `http://totoro:warp@example.org`, one proxy per line.
+Proxy format for `PROXY_FILE` is `protocol://user:pass@ip:port`, example: `socks5://example.org:1892` , one proxy per line.(http proxy is no supported because it cannot proxy UDP connections)
 
 ### Getting your own 12-24 PB keys to fill BASE_KEYS
 
