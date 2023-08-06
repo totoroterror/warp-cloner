@@ -20,10 +20,11 @@ With this script you will be able to clone many 12-24 PB keys.
 - `BASE_KEYS` (not required) - keys to clone divided by comma, if none then default keys will be used (script may not work with default keys)
 - `THREADS_COUNT` (default: `1`) - amount of threads.
 - `DEVICE_MODELS` (not required) - custom device model names divided by comma
+- `SAVE_WIREGUARD_VARIABLES` (default: false) - should script get variables that are required to generate WireGuard config (peer ips, private / public key, endpoint)?
 - `PROXY_FILE` (not required) - path to proxy file, if none then script will be launched in proxyless mode.
 - `DELAY` (default: `25`) - seconds to sleep after key clone
 - `OUTPUT_FILE` (default: `output.txt`) - file to append generated keys
-- `OUTPUT_FORMAT` (default: `{key} | {referral_count}`) - output format
+- `OUTPUT_FORMAT` (default: `{key} | {referral_count}`) - output format (if `SAVE_WIREGUARD_VARIABLES` is set to `true`, additinal variables is available: `{private_key}`, `{peer_endpoint}`, `{peer_public_key}`, `{interface_addresses}`)
 - `RETRY_COUNT` (default: 3) - how much times application will retry generation with same key
 
 ## Notes
