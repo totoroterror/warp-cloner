@@ -1,7 +1,7 @@
 FROM python:3.11-alpine
 
 RUN apk update
-RUN apk add make automake gcc g++ subversion python3-dev
+RUN apk add make automake gcc g++ subversion python3-dev libffi-dev
 
 WORKDIR /app
 
