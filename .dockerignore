@@ -1,0 +1,16 @@
+# https://github.com/garygitton/dockerignore
+# Common
+README.md
+CHANGELOG.md
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# git
+.git
+.github
+.gitattributes
+.gitignore
+
+.editorconfig
+.env.example
