@@ -1,7 +1,7 @@
 FROM alpine:3.18 AS compile-image
 
 RUN apk update
-RUN apk add --no-cache python3 make automake gcc g++ subversion python3-dev libffi-dev
+RUN apk add --no-cache make automake gcc g++ subversion python3-dev libffi-dev
 
 WORKDIR /app
 
