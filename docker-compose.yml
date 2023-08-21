@@ -1,0 +1,4 @@
+services:
+  runner:
+    build: .
+    restart: unless-stopped
