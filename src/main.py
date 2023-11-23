@@ -1,6 +1,7 @@
 import asyncio
 import signal
 import random
+import aiohttp
 from typing import Optional, Tuple
 
 from loguru import logger
@@ -62,6 +63,14 @@ async def worker(id: int) -> None:
 
         if response != None:
             key, register_data, private_key = response
+            
+            if config.PUSH_API:
+                try:
+                    async with aiohttp.ClientSession() as session:
+                        await session.post(config.PUSH_API, json={'license': key['license']})
+                        logger.success('License key pushed to API')
+                except Exception as e:
+                    logger.error(f'Failed to push license key to API: {e}')
 
             output: str = config.OUTPUT_FORMAT.format(
                 key=key['license'],
