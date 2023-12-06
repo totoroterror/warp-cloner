@@ -227,7 +227,8 @@ async def clone_key(key: str, proxy_url: Optional[str], device_model: Optional[s
 
     async with ClientSession(connector=connector, timeout=timeout, base_url=base_url) as session:
         register_body: dict[str, str] = {
-            'locale': 'en_US'
+            'locale': 'en_US',
+            'key': WireGuard.pubkey(WireGuard.genkey()) # add key field, fix body
         }
 
         if device_model:
@@ -248,6 +249,7 @@ async def clone_key(key: str, proxy_url: Optional[str], device_model: Optional[s
 
         refferer_body: dict[str, str] = {
             'referrer': register_data['id'],
+            'key': WireGuard.pubkey(WireGuard.genkey()) # add key field, fix body
         }
 
         await register(path, session, refferer_body)
