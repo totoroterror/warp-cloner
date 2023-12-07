@@ -47,7 +47,11 @@ async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> Optional[
         ))
 
         if config.DELAY > 0 and signal_handler.KEEP_PROCESSING:
-            await asyncio.sleep(config.DELAY)
+            sleep_time = config.DELAY
+
+            while sleep_time > 0 and signal_handler.KEEP_PROCESSING:
+                await asyncio.sleep(delay=1)
+                sleep_time -= 1
 
         return await custom_clone_key(key_to_clone=key_to_clone, retry_count=retry_count + 1)
 
@@ -78,7 +82,11 @@ async def worker(id: int) -> None:
                 file.write(output + '\n')
 
         if signal_handler.KEEP_PROCESSING and config.DELAY > 0:
-            await asyncio.sleep(config.DELAY)
+            sleep_time = config.DELAY
+
+            while sleep_time > 0 and signal_handler.KEEP_PROCESSING:
+                await asyncio.sleep(delay=1)
+                sleep_time -= 1
 
 
 async def main() -> None:
