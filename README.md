@@ -26,6 +26,7 @@ With this script you will be able to clone many 12-24 PB keys.
 - `OUTPUT_FILE` (default: `output.txt`) - file to append generated keys
 - `OUTPUT_FORMAT` (default: `{key} | {referral_count}`) - output format (if `SAVE_WIREGUARD_VARIABLES` is set to `true`, additinal variables is available: `{private_key}`, `{peer_endpoint}`, `{peer_public_key}`, `{interface_addresses}`)
 - `RETRY_COUNT` (default: 3) - how much times application will retry generation with same key
+- `PUSH_API` (not required) - When a push api is specified, every time a license is successfully acquired, it will be submitted to the specified api via http post.
 
 ## Notes
 

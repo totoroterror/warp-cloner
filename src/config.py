@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     OUTPUT_FILE: str = Field(env='OUTPUT_FILE', default='output.txt')
     OUTPUT_FORMAT: str = Field(env='OUTPUT_FORMAT', default='{key} | {referral_count}')
     RETRY_COUNT: int = Field(env='RETRY_COUNT', default=3)
+    PUSH_API: str | None = Field(env='PUSH_API', default=None)
 
     class Config:
         env_file = '.env'
