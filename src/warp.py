@@ -256,7 +256,7 @@ async def clone_key(key: str, proxy_url: Optional[str], device_model: Optional[s
             'key': WireGuard.pubkey(privkey=WireGuard.genkey()),
             'locale': 'en_US',
             'model': 'PC',
-            'tos': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f+00:00"),
+            'tos': datetime.datetime.now(tz=datetime.timezone.utc).isoformat(),
             'type': 'Android',
             'referrer': register_data['id'],
         }
