@@ -11,8 +11,10 @@ from wireguard import WireGuard
 
 BASE_URL: str = 'https://api.cloudflareclient.com'
 BASE_HEADERS: dict[str, str] = {
+    'Accept': 'application/json',
+    'Accept-Encoding': 'gzip',
+    'Cf-Client-Version': 'a-6.3-1922',
     'User-Agent': 'okhttp/3.12.1',
-    'cf-client-version': 'a-6.3-1922'
 }
 
 
@@ -96,7 +98,7 @@ async def register(path: str, session: ClientSession, data: dict[str, str] = {})
     response: ClientResponse = await session.post(
         '/{}/reg'.format(path),
         headers={
-            'Content-Type': 'application/json; charset=UTF-8',
+            'Content-Type': 'application/json',
             **BASE_HEADERS,
         },
         json=data
@@ -226,27 +228,36 @@ async def clone_key(key: str, proxy_url: Optional[str], device_model: Optional[s
     timeout: ClientTimeout = ClientTimeout(total=15)
 
     async with ClientSession(connector=connector, timeout=timeout, base_url=base_url) as session:
+        private_key = WireGuard.genkey()
+
         register_body: dict[str, str] = {
-            'locale': 'en_US'
+            'fcm_token': '',
+            'install_id': '',
+            'key': WireGuard.pubkey(private_key),
+            'locale': 'en_US',
+            'model': 'PC',
+            'tos': datetime.datetime.now(tz=datetime.timezone.utc).isoformat(),
+            'type': 'Android',
         }
 
         if device_model:
             register_body['type'] = 'Android'
             register_body['model'] = device_model
 
-        private_key = None
-
         if config.SAVE_WIREGUARD_VARIABLES:
             register_body['type'] = 'Android'
             register_body['model'] = register_body['model'] if 'model' in register_body else 'PC'
 
-            private_key = WireGuard.genkey()
-
-            register_body['key'] = WireGuard.pubkey(private_key)
-
-        register_data: RegisterData = await register(path, session, register_body)
+        register_data: RegisterData = await register(path=path, session=session, data=register_body)
 
         refferer_body: dict[str, str] = {
+            'fcm_token': '',
+            'install_id': '',
+            'key': WireGuard.pubkey(privkey=WireGuard.genkey()),
+            'locale': 'en_US',
+            'model': 'PC',
+            'tos': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f+00:00"),
+            'type': 'Android',
             'referrer': register_data['id'],
         }
 

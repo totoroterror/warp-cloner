@@ -14,8 +14,8 @@ from utilities import key_dispatcher, proxy_dispatcher
 class SignalHandler:
     KEEP_PROCESSING: bool = True
     def __init__(self) -> None:
-        signal.signal(signal.SIGINT, self.exit_gracefully)
-        signal.signal(signal.SIGTERM, self.exit_gracefully)
+        signal.signal(signalnum=signal.SIGINT, handler=self.exit_gracefully)
+        signal.signal(signalnum=signal.SIGTERM, handler=self.exit_gracefully)
 
     def exit_gracefully(self, signum, frame) -> None:
         logger.info('Received signal {}, stopping all threads...'.format(signum))
@@ -31,9 +31,9 @@ async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> Optional[
 
     try:
         key, register_data, private_key = await clone_key(
-            key_to_clone,
-            proxy_dispatcher.get_proxy(),
-            len(config.DEVICE_MODELS) > 0 and random.choice(config.DEVICE_MODELS) or None,
+            key=key_to_clone,
+            proxy_url=proxy_dispatcher.get_proxy(),
+            device_model=len(config.DEVICE_MODELS) > 0 and random.choice(config.DEVICE_MODELS) or None,
         )
 
         key_dispatcher.add_key(key['license'])
@@ -49,7 +49,7 @@ async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> Optional[
         if config.DELAY > 0 and signal_handler.KEEP_PROCESSING:
             await asyncio.sleep(config.DELAY)
 
-        return await custom_clone_key(key_to_clone, retry_count + 1)
+        return await custom_clone_key(key_to_clone=key_to_clone, retry_count=retry_count + 1)
 
 
 async def worker(id: int) -> None:
@@ -57,7 +57,7 @@ async def worker(id: int) -> None:
 
     while signal_handler.KEEP_PROCESSING:
         response = await custom_clone_key(
-            key_dispatcher.get_key(),
+            key_to_clone=key_dispatcher.get_key(),
         )
 
         if response != None:
