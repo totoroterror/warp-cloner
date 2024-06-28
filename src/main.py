@@ -1,4 +1,5 @@
 import asyncio
+from base64 import b64decode
 import signal
 import random
 from typing import Optional, Tuple
@@ -25,12 +26,31 @@ class SignalHandler:
 signal_handler = SignalHandler()
 
 
-async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> Optional[Tuple[GetInfoData, RegisterData, Optional[str]]]:
+def client_id_to_reserved(client_id: str) -> list[int]:
+    decoded = b64decode(client_id)
+    hex_string = decoded.hex()
+    decValues = []
+
+    for i in range(0, len(hex_string), 2):
+        hexByte = hex_string[i:i+2]
+        dec_value = int(hexByte, 16)
+        decValues.append("{:03d}{:03d}{:03d}".format(dec_value // 100, (dec_value // 10) % 10, dec_value % 10))
+
+    reserved = []
+    for i in range(0, len(hex_string), 2):
+        hexByte = hex_string[i:i+2]
+        dec_value = int(hexByte, 16)
+        reserved.append(dec_value)
+
+    return reserved
+
+
+async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> Optional[Tuple[GetInfoData, RegisterData, Optional[str], str]]:
     if retry_count > config.RETRY_COUNT or not signal_handler.KEEP_PROCESSING:
         return None
 
     try:
-        key, register_data, private_key = await clone_key(
+        key, register_data, private_key, client_id = await clone_key(
             key=key_to_clone,
             proxy_url=proxy_dispatcher.get_proxy(),
             device_model=len(config.DEVICE_MODELS) > 0 and random.choice(config.DEVICE_MODELS) or None,
@@ -38,7 +58,7 @@ async def custom_clone_key(key_to_clone: str, retry_count: int = 0) -> Optional[
 
         key_dispatcher.add_key(key['license'])
 
-        return key, register_data, private_key
+        return key, register_data, private_key, client_id
     except Exception as e:
         logger.error('{} (key: {}, retry count: {})'.format(
             e,
@@ -65,7 +85,7 @@ async def worker(id: int) -> None:
         )
 
         if response != None:
-            key, register_data, private_key = response
+            key, register_data, private_key, client_id = response
 
             output: str = config.OUTPUT_FORMAT.format(
                 key=key['license'],
@@ -74,6 +94,7 @@ async def worker(id: int) -> None:
                 peer_endpoint=config.SAVE_WIREGUARD_VARIABLES and register_data['config']['peers'][0]['endpoint']['host'] or '',
                 peer_public_key=config.SAVE_WIREGUARD_VARIABLES and register_data['config']['peers'][0]['public_key'] or '',
                 interface_addresses=config.SAVE_WIREGUARD_VARIABLES and (register_data['config']['interface']['addresses']['v4'] + '/32, ' + register_data['config']['interface']['addresses']['v6'] + '/128') or '',
+                reserved=client_id_to_reserved(client_id=client_id)
             )
 
             logger.success(output)
