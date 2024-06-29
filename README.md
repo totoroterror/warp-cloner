@@ -17,14 +17,15 @@ With this script you will be able to clone many 12-24 PB keys.
 
 ## Configuration
 
-- `BASE_KEYS` (not required) - keys to clone divided as array in JSON format (ex: `["key1", "key2"]`), if none then default keys will be used (script may not work with default keys)
+- `BASE_KEYS` (optional) - keys to clone divided as array in JSON format (ex: `["key1", "key2"]`), if none then default keys will be used (script may not work with default keys)
 - `THREADS_COUNT` (default: `1`) - amount of threads.
-- `DEVICE_MODELS` (not required) - custom device model names divided as array in JSON format (ex: `["Android", "Secret Device"]`)
+- `DEVICE_MODELS` (optional) - custom device model names divided as array in JSON format (ex: `["Android", "Secret Device"]`)
 - `SAVE_WIREGUARD_VARIABLES` (default: false) - should script get variables that are required to generate WireGuard config (peer ips, private / public key, endpoint)?
-- `PROXY_FILE` (not required) - path to proxy file, if none then script will be launched in proxyless mode.
+- `PROXY_FILE` (optional) - path to proxy file, if none then script will be launched in proxyless mode.
 - `DELAY` (default: `25`) - seconds to sleep after key clone
 - `OUTPUT_FILE` (default: `output.txt`) - file to append generated keys
 - `OUTPUT_FORMAT` (default: `{key} | {referral_count}`) - output format (if `SAVE_WIREGUARD_VARIABLES` is set to `true`, additinal variables is available: `{private_key}`, `{peer_endpoint}`, `{peer_public_key}`, `{interface_addresses}`, `{reserved}`)
+- `WEBHOOK_KEYS_URL` (optional) - http endpoint that will accept post request with key data
 - `RETRY_COUNT` (default: 3) - how much times application will retry generation with same key
 
 ## Notes

@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     THREADS_COUNT: int = Field(validation_alias='THREADS_COUNT', default=1)
     PROXY_FILE: str | None = Field(validation_alias='PROXY_FILE', default=None)
     DEVICE_MODELS: list[str] = Field(validation_alias='DEVICE_MODELS', default=[])
+    WEBHOOK_KEY_URL: str | None = Field(validation_alias='WEBHOOK_KEY_URL', default=None)
     SAVE_WIREGUARD_VARIABLES: bool = Field(validation_alias='SAVE_WIREGUARD_VARIABLES', default=False)
     DELAY: int = Field(validation_alias='DELAY', default=25)
     OUTPUT_FILE: str = Field(validation_alias='OUTPUT_FILE', default='output.txt')

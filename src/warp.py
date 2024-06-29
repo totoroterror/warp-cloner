@@ -5,8 +5,6 @@ from config import config
 
 from typing import Any, Optional, Tuple, TypedDict
 
-from base64 import b64decode
-
 from aiohttp import ClientResponse, ClientSession, ClientTimeout
 from aiohttp_socks import ProxyConnector
 

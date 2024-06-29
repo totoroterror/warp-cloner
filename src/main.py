@@ -1,10 +1,12 @@
 import asyncio
-from base64 import b64decode
 import signal
 import random
+
+from base64 import b64decode
 from typing import Optional, Tuple
 
 from loguru import logger
+from aiohttp import ClientResponse, ClientSession, ClientTimeout
 
 from config import config
 from warp import RegisterData, clone_key, GetInfoData
@@ -87,14 +89,31 @@ async def worker(id: int) -> None:
         if response != None:
             key, register_data, private_key, client_id = response
 
+            data = {
+                'key': key['license'],
+                'referral_count': key['referral_count'],
+                'private_key': config.SAVE_WIREGUARD_VARIABLES and private_key or '',
+                'peer_endpoint': config.SAVE_WIREGUARD_VARIABLES and register_data['config']['peers'][0]['endpoint']['host'] or '',
+                'peer_public_key': config.SAVE_WIREGUARD_VARIABLES and register_data['config']['peers'][0]['public_key'] or '',
+                'interface_addresses': config.SAVE_WIREGUARD_VARIABLES and (register_data['config']['interface']['addresses']['v4'] + '/32, ' + register_data['config']['interface']['addresses']['v6'] + '/128') or '',
+                'reserved': client_id_to_reserved(client_id=client_id)
+            }
+
+            if config.WEBHOOK_KEY_URL:
+                try:
+                    async with ClientSession() as session:
+                        await session.post(config.WEBHOOK_KEY_URL, json=data)
+                except Exception as e:
+                    logger.error('failed to send webhook, {}'.format(e))
+
             output: str = config.OUTPUT_FORMAT.format(
-                key=key['license'],
-                referral_count=key['referral_count'],
-                private_key=config.SAVE_WIREGUARD_VARIABLES and private_key or '',
-                peer_endpoint=config.SAVE_WIREGUARD_VARIABLES and register_data['config']['peers'][0]['endpoint']['host'] or '',
-                peer_public_key=config.SAVE_WIREGUARD_VARIABLES and register_data['config']['peers'][0]['public_key'] or '',
-                interface_addresses=config.SAVE_WIREGUARD_VARIABLES and (register_data['config']['interface']['addresses']['v4'] + '/32, ' + register_data['config']['interface']['addresses']['v6'] + '/128') or '',
-                reserved=client_id_to_reserved(client_id=client_id)
+                key=data['key'],
+                referral_count=data['referral_count'],
+                private_key=data['private_key'],
+                peer_endpoint=data['peer_endpoint'],
+                peer_public_key=data['peer_public_key'],
+                interface_addresses=data['interface_addresses'],
+                reserved=data['reserved']
             )
 
             logger.success(output)
