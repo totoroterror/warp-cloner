@@ -253,19 +253,6 @@ async def clone_key(key: str, proxy_url: Optional[str], device_model: Optional[s
 
         client_id = register_data['config']['client_id']
 
-        refferer_body: dict[str, str] = {
-            'fcm_token': '',
-            'install_id': '',
-            'key': WireGuard.pubkey(privkey=WireGuard.genkey()),
-            'locale': 'en_US',
-            'model': 'PC',
-            'tos': datetime.datetime.now(tz=datetime.timezone.utc).isoformat(),
-            'type': 'Android',
-            'referrer': register_data['id'],
-        }
-
-        await register(path, session, refferer_body)
-
         await add_key(path, session, register_data['id'], register_data['token'], key)
         await add_key(path, session, register_data['id'], register_data['token'], register_data['account']['license'])
 
